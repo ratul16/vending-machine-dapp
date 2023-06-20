@@ -4,7 +4,7 @@
       <h1>Vending Machine</h1>
       <div class="metamask-container">
         <button type="button" class="btn btn-success" @click="connectWallet">
-          {{ connected ? "Wallet Connected" : "Connect Wallet" }}
+          {{ connected ? "Connected" : "Connect Wallet" }}
         </button>
       </div>
     </div>
@@ -13,7 +13,7 @@
         <div class="col-md-6 mb-2">
           <div class="info-box shadow-sm">
             <h6>Account</h6>
-            <p>{{ connected ? account[0] : "Wallet not connected !" }}</p>
+            <p>{{ connected ? account : "Wallet not connected !" }}</p>
           </div>
         </div>
         <div class="col-md-3 mb-2">
@@ -64,40 +64,30 @@ export default {
   data() {
     return {
       connected: false,
-      account: [],
+      account: "",
       inventory: "",
       userInventory: "",
       donutAmount: 0,
-      web3: null,
     };
   },
   mounted() {
     this.getInventory();
   },
   methods: {
-    async connectWallet() {
+    connectWallet() {
       if (window.ethereum) {
-        //meta mask is installed
-        //set web3 instance
-        this.web3 = new Web3(
-          new Web3.providers.HttpProvider("http://127.0.0.1:7545")
-        );
-
-        //set account address
-        this.account = await this.web3.eth.getAccounts();
-
-        // connecting with metamask
+        //meta mask installed
         window.ethereum
           .request({ method: "eth_requestAccounts" })
-          .then(() => {
+          .then((res) => {
             this.connected = true;
+            this.account = res[0];
             this.getUserInventory();
           })
           .catch((err) => {
             alert(err.message);
           });
       } else {
-        //meta mask is not installed
         alert("Install Metamask");
       }
     },
@@ -109,15 +99,15 @@ export default {
     },
     async getUserInventory() {
       this.userInventory = await lcContract.methods
-        .donutBalances(this.account[0])
+        .donutBalances(this.account)
         .call();
     },
     async purchaseDonut() {
       await lcContract.methods
         .purchase(this.donutAmount)
         .send({
-          from: this.account[0],
-          value: this.web3.utils.toWei("2", "ether") * this.donutAmount,
+          from: this.account,
+          value: Web3.utils.toWei("2", "ether") * this.donutAmount,
         })
         .once("receipt", (receipt) => {
           console.log(receipt);

@@ -1,36 +1,12 @@
 <template>
   <div class="home">
-    <h1>Connect To MetaMask</h1>
-    <h4 v-if="connected">{{ contractResult }}</h4>
-    <div class="metamask-container">
-      <button class="metamask-btn" @click="connectWallet">Connect</button>
-    </div>
+    <h1>Home</h1>
   </div>
 </template>
 
 <script>
 export default {
   name: "HomeView",
-
-  data() {
-    return {
-      connected: false,
-      contractResult: "Address of the wallet",
-    };
-  },
-  methods: {
-    connectWallet() {
-      if (window.ethereum) {
-        window.ethereum
-          .request({ method: "eth_requestAccounts" })
-          .then((res) => {
-            this.connected = true;
-            console.log(res[0]);
-            this.contractResult = res[0];
-          });
-      }
-    },
-  },
 };
 </script>
 

@@ -1,9 +1,11 @@
 import { defineStore } from "pinia";
 
-export const useCounterStore = defineStore({
-  id: "counter",
+export const useWalletStore = defineStore({
+  id: "walletStore",
   state: () => ({
-    counter: 0,
+    connected: false,
+    account: "",
+    inventory: "",
   }),
   getters: {
     doubleCount: (state) => state.counter * 2,

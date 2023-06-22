@@ -1,7 +1,7 @@
 // This file is to export the smart contract locally for the vue app to use
 import Web3 from 'web3';
 
-const contractAddress = "0x3D464a596860De4ea21Ce1602bD6820C660Cc3Db";
+const contractAddress = "0xe8B974EBAcbB6770c5BD1c27F34B451073D4058D";
 
 //http provider shows vue which blockchain to target
 const provider = new Web3.providers.HttpProvider('http://127.0.0.1:7545');

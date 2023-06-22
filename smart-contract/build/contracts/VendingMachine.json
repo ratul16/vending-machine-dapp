@@ -4626,12 +4626,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x3D464a596860De4ea21Ce1602bD6820C660Cc3Db",
-      "transactionHash": "0xa024eb4120ab5826238356d0237bb2ac7a6cd792520ac81d55d5ffe9e4a437f2"
+      "address": "0xe8B974EBAcbB6770c5BD1c27F34B451073D4058D",
+      "transactionHash": "0xd062cc9dab091d54512ae7963cf4276c2a210117128f35442512b6e988559922"
     }
   },
   "schemaVersion": "3.4.13",
-  "updatedAt": "2023-06-19T13:53:11.267Z",
+  "updatedAt": "2023-06-22T09:40:08.988Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

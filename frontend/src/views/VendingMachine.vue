@@ -51,6 +51,27 @@
           </button>
         </div>
       </div>
+      <hr />
+      <div class="transaction-history" v-if="transactionList.length">
+        <table class="table table-striped table-hover">
+          <thead class="sticky-header">
+            <tr>
+              <th>Block No.</th>
+              <th>Hash</th>
+              <th>From</th>
+              <th>Ether</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="tx in transactionList.slice().reverse()" :key="tx.hash">
+              <td>{{ tx.blockNumber }}</td>
+              <td>{{ tx.hash }}</td>
+              <td>{{ tx.from }}</td>
+              <td>{{ tx.value }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -68,10 +89,12 @@ export default {
       inventory: "",
       userInventory: "",
       donutAmount: 0,
+      transactionList: [],
     };
   },
   mounted() {
     this.getInventory();
+    this.getTransactionHistory();
   },
   methods: {
     connectWallet() {
@@ -114,10 +137,41 @@ export default {
           this.donutAmount = 0;
           this.getUserInventory();
           this.getInventory();
+          this.getTransactionHistory();
         })
         .catch((err) => {
           console.log(err);
         });
+    },
+    async getTransactionHistory() {
+      try {
+        const web3 = new Web3(
+          new Web3.providers.HttpProvider("http://127.0.0.1:7545")
+        );
+        const latestBlockNumber = await web3.eth.getBlockNumber();
+        const transactionHistory = [];
+
+        // Iterate through the blocks to get the transactions
+        for (let i = 0; i <= latestBlockNumber; i++) {
+          const block = await web3.eth.getBlock(i, true);
+
+          if (block && block.transactions) {
+            block.transactions.forEach((tx) => {
+              const transaction = {
+                blockNumber: block.number,
+                hash: tx.hash,
+                from: tx.from,
+                value: web3.utils.fromWei(tx.value, "ether"),
+              };
+
+              transactionHistory.push(transaction);
+            });
+          }
+        }
+        this.transactionList = transactionHistory;
+      } catch (error) {
+        console.error("Error getting transaction history:", error);
+      }
     },
   },
 };
@@ -148,5 +202,17 @@ export default {
 .info-box span {
   font-size: 32px;
   font-weight: 500;
+}
+
+.transaction-history {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.transaction-history .sticky-header {
+  position: sticky;
+  top: 0;
+  background-color: #cae5ff;
+  z-index: 1;
 }
 </style>

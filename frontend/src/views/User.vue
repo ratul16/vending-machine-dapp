@@ -100,7 +100,7 @@ export default {
       isMessageVisible: false,
     };
   },
-  mounted() {
+  created() {
     if (typeof window.ethereum !== "undefined") {
       this.checkUserRegistration();
       // this.contract = lcContract;
@@ -110,21 +110,6 @@ export default {
     }
   },
   methods: {
-    // async registerUser() {
-    //   const accounts = await window.ethereum.request({
-    //     method: "eth_requestAccounts",
-    //   });
-    //   const user = accounts[0];
-    //   await lcContract.methods
-    //     .registerUser(this.name, this.email, this.password)
-    //     .send({ from: user })
-    //     .then((res) => {
-    //       console.log("response:" + res);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // },
     async registerUser() {
       try {
         const accounts = await window.ethereum.request({
@@ -139,12 +124,16 @@ export default {
 
         await lcContract.methods
           .registerUser(this.name, this.email, this.password)
-          .send({ from: user, gas: gasLimit });
+          .send({ from: user, gas: gasLimit })
+          .once("receipt", (receipt) => {
+            console.log(receipt);
+          });
 
         this.toastNotification(
           "alert-success",
           "User registered successfully!"
         );
+        this.checkUserRegistration();
       } catch (error) {
         console.log(error);
         this.toastNotification("alert-danger", "User Already registered!");
@@ -168,8 +157,6 @@ export default {
           name: userDetails[0],
           email: userDetails[1],
         };
-        // console.log(Object.keys(userDetails)[0]);
-        // console.log(userDetails[0]);
       } catch (error) {
         // console.error("Error checking user registration:", error);
         this.toastNotification("alert-danger", "User Already registered!");

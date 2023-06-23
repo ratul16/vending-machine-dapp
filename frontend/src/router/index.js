@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import HomeView from '../views/HomeView.vue';
 
 Vue.use(VueRouter);
 
@@ -9,9 +8,14 @@ const router = new VueRouter({
   base: import.meta.env.BASE_URL,
   routes: [
     {
-      path: '/',
-      name: 'home',
+      path: '/vending',
+      name: 'vending',
       component: () => import('../views/VendingMachine.vue')
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/User.vue')
     },
   ]
 });

@@ -93,8 +93,8 @@ export default {
     };
   },
   mounted() {
-    this.getInventory();
-    this.getTransactionHistory();
+    // this.getInventory();
+    // this.getTransactionHistory();
   },
   methods: {
     connectWallet() {
